@@ -269,10 +269,3 @@ just search "keyword"
 | **Prompts**     | Orchestration — coordinate skills and agents   |
 | **Justfile**    | Terminal access without an interactive session |
 | **The Library** | Distribution across devices, teams, and agents |
-
-## Master Agentic Coding
-> Prepare for the future of software engineering
-
-Agentic Engineering is a NEW SKILL for software engineers. And soon it will be a required skill for software engineers. Master it before the masses with [Tactical Agentic Coding](https://agenticengineer.com/tactical-agentic-coding?y=tlibms)
-
-Follow the [IndyDevDan YouTube channel](https://www.youtube.com/@indydevdan) to improve your agentic coding advantage.
