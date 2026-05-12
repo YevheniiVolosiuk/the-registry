@@ -1,8 +1,8 @@
-# The Library
+# The Registry
 
 A meta-skill for private-first distribution of agentics (skills, agents, and prompts) across agents, devices, and teams.
 
-![The Library](images/10_meta_skill.svg)
+![The Registry](images/10_meta_skill.svg)
 
 ## Who This Is For
 
@@ -10,11 +10,11 @@ If you're an engineer working on 10+ codebases with agents and you're building s
 
 If you work in one or two repos, you don't need this. If you install skills from the public internet without reviewing them, this isn't for you either.
 
-The Library solves a specific problem: you've built powerful agentics scattered across repos, devices, and teams. They're duplicated, out of sync, and hard to coordinate. This gives you a single reference catalog to distribute them privately.
+The Registry solves a specific problem: you've built powerful agentics scattered across repos, devices, and teams. They're duplicated, out of sync, and hard to coordinate. This gives you a single reference catalog to distribute them privately.
 
 ## What It Is
 
-The Library is a single skill whose only job is to manage other skills. It's a catalog of references — local file paths and GitHub repo URLs — that point to where your agentics live. Nothing is copied or installed until you ask for it.
+The Registry is a single skill whose only job is to manage other skills. It's a catalog of references — local file paths and GitHub repo URLs — that point to where your agentics live. Nothing is copied or installed until you ask for it.
 
 Think of it as a `package.json` for agent capabilities — but instead of packages, you're managing skills, agents, and prompts. Instead of a registry, you're pointing at your own private GitHub repos and local paths.
 
@@ -23,7 +23,7 @@ Think of it as a `package.json` for agent capabilities — but instead of packag
 - Any agent harness that reads skill files can run it (Claude Code, Pi, etc.)
 - You can modify behavior by editing markdown, not code
 - The skill can be extended, forked, and adapted instantly
-- An orchestrator agent can chain library commands without any tooling overhead
+- An orchestrator agent can chain registry commands without any tooling overhead
 
 ## Why It Exists
 
@@ -46,9 +46,9 @@ Existing solutions don't fit:
 
 ## How It Works
 
-![The Solution: The Library](images/27_solution_library_workflow.svg)
+![The Solution: The Registry](images/27_solution_registry_workflow.svg)
 
-### The Catalog (`library.yaml`)
+### The Catalog (`registry.yaml`)
 
 ```yaml
 default_dirs:
@@ -62,7 +62,7 @@ default_dirs:
     - default: .claude/commands/
     - global: ~/.claude/commands/
 
-library:
+registry:
   skills:
     - name: my-skill
       description: What this skill does
@@ -109,49 +109,49 @@ Dependencies are resolved and pulled first, recursively.
 
 ## Installation
 
-This is a template repo. You fork it, clone it into your global skills directory, and it becomes a `/library` slash command available in every Claude Code session.
+This is a template repo. You fork it, clone it into your global skills directory, and it becomes a `/registry` slash command available in every Claude Code session.
 
 ### 1. Fork This Repo
 
-Fork to your own GitHub account (private repo recommended). This fork is your personal library catalog — you'll push catalog updates to it.
+Fork to your own GitHub account (private repo recommended). This fork is your personal registry catalog — you'll push catalog updates to it.
 
 ```bash
 # Using GitHub CLI
-gh repo fork disler/the-library --private --clone=false
+gh repo create YevheniiVolosiuk/the-registry --private --template disler/the-library --clone=false
 ```
 
 Or fork manually via the GitHub UI.
 
 ### 2. Clone to Global Skills Directory
 
-Clone your fork into `~/.claude/skills/library`. This path is what makes `/library` available as a global slash command in Claude Code.
+Clone your fork into `~/.claude/skills/registry`. This path is what makes `/registry` available as a global slash command in Claude Code.
 
 ```bash
 # Using git
-mkdir -p ~/.claude/skills/library
-git clone <your-fork-url> ~/.claude/skills/library
+mkdir -p ~/.claude/skills/registry
+git clone <your-fork-url> ~/.claude/skills/registry
 
 # Or using GitHub CLI
-gh repo clone <yourname>/the-library ~/.claude/skills/library
+gh repo clone <yourname>/the-registry ~/.claude/skills/registry
 ```
 
 ### 3. Configure
 
-Open `~/.claude/skills/library/SKILL.md` and update the `## Variables` section with your fork URL. The agent reads these variables at runtime to know where to sync the catalog.
+Open `~/.claude/skills/registry/SKILL.md` and update the `## Variables` section with your fork URL. The agent reads these variables at runtime to know where to sync the catalog.
 
 ```markdown
 # Before (template defaults)
-- **LIBRARY_REPO_URL**: `<your forked repo url>`
+- **REGISTRY_REPO_URL**: `<your forked repo url>`
 
 # After (your values)
-- **LIBRARY_REPO_URL**: `https://github.com/yourname/the-library.git`
+- **REGISTRY_REPO_URL**: `https://github.com/yourname/the-registry.git`
 ```
 
-The other two variables (`LIBRARY_YAML_PATH` and `LIBRARY_SKILL_DIR`) are correct by default if you cloned to `~/.claude/skills/library/`.
+The other two variables (`REGISTRY_YAML_PATH` and `REGISTRY_SKILL_DIR`) are correct by default if you cloned to `~/.claude/skills/registry/`.
 
 ### 4. Verify
 
-Start a new Claude Code session anywhere. `/library list` should work and show an empty catalog.
+Start a new Claude Code session anywhere. `/registry list` should work and show an empty catalog.
 
 ## Quick Start
 
@@ -164,17 +164,17 @@ Here's the typical workflow: **build → catalog → distribute → use**.
 You built a deploy skill in one of your repos. Register it:
 
 ```
-/library add deploy skill from https://github.com/yourorg/infra-tools/blob/main/skills/deploy/SKILL.md
+/registry add deploy skill from https://github.com/yourorg/infra-tools/blob/main/skills/deploy/SKILL.md
 ```
 
-This adds a reference to `library.yaml` and pushes the update to your fork.
+This adds a reference to `registry.yaml` and pushes the update to your fork.
 
 ### Use it in another project
 
 On another device, repo, or agent:
 
 ```
-/library use deploy
+/registry use deploy
 ```
 
 This pulls the skill from the source repo into `.claude/skills/deploy/`.
@@ -182,7 +182,7 @@ This pulls the skill from the source repo into `.claude/skills/deploy/`.
 Want it globally available on this machine?
 
 ```
-/library use deploy install globally
+/registry use deploy install globally
 ```
 
 ### Push changes back
@@ -190,35 +190,35 @@ Want it globally available on this machine?
 You improved the skill locally. Push the update to the source repo:
 
 ```
-/library push deploy
+/registry push deploy
 ```
 
-Now every device that runs `/library sync` gets the latest version.
+Now every device that runs `/registry sync` gets the latest version.
 
 ### Sync everything
 
 Pull the latest version of all installed items:
 
 ```
-/library sync
+/registry sync
 ```
 
 ## Commands
 
 | Command                     | What It Does                                               |
 | --------------------------- | ---------------------------------------------------------- |
-| `/library install`          | First-time setup — fork, clone, configure                  |
-| `/library add <details>`    | Register a new entry in the catalog                        |
-| `/library use <name>`       | Pull from source into local directory (install or refresh) |
-| `/library push <name>`      | Push local changes back to the source                      |
-| `/library remove <name>`    | Remove from catalog and optionally delete local copy       |
-| `/library list`             | Show full catalog with install status                      |
-| `/library sync`             | Re-pull all installed items from source                    |
-| `/library search <keyword>` | Find entries by name or description                        |
+| `/registry install`          | First-time setup — fork, clone, configure                  |
+| `/registry add <details>`    | Register a new entry in the catalog                        |
+| `/registry use <name>`       | Pull from source into local directory (install or refresh) |
+| `/registry push <name>`      | Push local changes back to the source                      |
+| `/registry remove <name>`    | Remove from catalog and optionally delete local copy       |
+| `/registry list`             | Show full catalog with install status                      |
+| `/registry sync`             | Re-pull all installed items from source                    |
+| `/registry search <keyword>` | Find entries by name or description                        |
 
 ### Justfile Shortcuts
 
-The included `justfile` lets you run library commands from your terminal without an interactive Claude session.
+The included `justfile` lets you run registry commands from your terminal without an interactive Claude session.
 
 ```bash
 just list                  # List catalog
@@ -234,9 +234,9 @@ just search "keyword"
 ## Architecture
 
 ```
-~/.claude/skills/library/     # The Library skill (globally installed)
+~/.claude/skills/registry/     # The Registry skill (globally installed)
     SKILL.md                  # Agent instructions — the brain
-    library.yaml              # Your catalog of references
+    registry.yaml              # Your catalog of references
     cookbook/                  # Step-by-step guides for each command
         install.md
         add.md
@@ -268,4 +268,4 @@ just search "keyword"
 | **Agents**      | Scale + parallelism + specialization           |
 | **Prompts**     | Orchestration — coordinate skills and agents   |
 | **Justfile**    | Terminal access without an interactive session |
-| **The Library** | Distribution across devices, teams, and agents |
+| **The Registry** | Distribution across devices, teams, and agents |
