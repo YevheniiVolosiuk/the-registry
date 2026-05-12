@@ -139,7 +139,7 @@ Create a private copy from this template — this becomes your personal catalog 
 
 ```bash
 # Using GitHub CLI
-gh repo create YevheniiVolosiuk/the-registry --private --template disler/the-library --clone=false
+gh repo create new-repo-name --template YevheniiVolosiuk/the-registry
 ```
 
 Or create it manually via the GitHub UI using the **"Use this template"** button.
