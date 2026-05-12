@@ -15,19 +15,7 @@ Just portable agent infrastructure.
 
 Think of it as **`package.json` for agent capabilities** — but instead of public packages, you point at your own private repos and local paths. Instead of copying skills between projects, you maintain one catalog of references that agents pull on demand.
 
-```
-┌──────────────────────┐
-│     The Registry     │
-│    registry.yaml     │
-└──────────┬───────────┘
-           │
-    ┌──────┼──────┐
-    │      │      │
- Skills  Agents Prompts
-    │      │      │
- GitHub  Local   Private
- Repos   Paths   Repos
-```
+![Mental Model](images/15_mental_model.svg)
 
 ---
 

@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <filter id="mmGlowIndigo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feFlood flood-color="#6366F1" flood-opacity="0.5" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="mmGlowEmerald" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood flood-color="#10B981" flood-opacity="0.45" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="mmGlowPurple" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood flood-color="#8B5CF6" flood-opacity="0.45" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="mmGlowAmber" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood flood-color="#F59E0B" flood-opacity="0.5" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- ========== TITLE ========== -->
+  <text x="400" y="40" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="700" fill="#E0E0E0" opacity="0">
+    Mental Model
+    <animate attributeName="opacity" from="0" to="1" begin="0.2s" dur="0.6s" fill="freeze"/>
+  </text>
+  <line x1="320" y1="50" x2="480" y2="50" stroke="#8B5CF6" stroke-width="1" opacity="0">
+    <animate attributeName="opacity" from="0" to="0.5" begin="0.2s" dur="0.6s" fill="freeze"/>
+  </line>
+  <text x="400" y="78" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" font-style="italic" fill="#9CA3AF" opacity="0">
+    package.json for agent capabilities
+    <animate attributeName="opacity" from="0" to="1" begin="0.5s" dur="0.6s" fill="freeze"/>
+  </text>
+
+  <!-- ========== REGISTRY (top center) ========== -->
+  <g opacity="0">
+    <animate attributeName="opacity" from="0" to="1" begin="0.8s" dur="0.6s" fill="freeze"/>
+    <rect x="290" y="115" width="220" height="80" rx="12" fill="#0F172A" stroke="#6366F1" stroke-width="2" filter="url(#mmGlowIndigo)"/>
+    <rect x="290" y="115" width="220" height="80" rx="12" fill="#6366F1" opacity="0.1"/>
+    <text x="400" y="146" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="#E0E0E0" letter-spacing="1.5">THE</text>
+    <text x="400" y="167" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="700" fill="#6366F1" letter-spacing="2">REGISTRY</text>
+    <text x="400" y="184" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#9CA3AF">registry.yaml</text>
+  </g>
+
+  <!-- ========== TRUNK + FORK LINES ========== -->
+  <g opacity="0">
+    <animate attributeName="opacity" from="0" to="0.6" begin="1.4s" dur="0.5s" fill="freeze"/>
+    <!-- vertical trunk down from registry -->
+    <line x1="400" y1="195" x2="400" y2="240" stroke="#4B5563" stroke-width="1.5"/>
+    <!-- horizontal fork -->
+    <line x1="190" y1="240" x2="610" y2="240" stroke="#4B5563" stroke-width="1.5"/>
+    <!-- three drops to category nodes -->
+    <line x1="190" y1="240" x2="190" y2="280" stroke="#10B981" stroke-width="1.5"/>
+    <line x1="400" y1="240" x2="400" y2="280" stroke="#8B5CF6" stroke-width="1.5"/>
+    <line x1="610" y1="240" x2="610" y2="280" stroke="#F59E0B" stroke-width="1.5"/>
+  </g>
+
+  <!-- ========== CATEGORY NODES ========== -->
+  <!-- Skills (emerald) -->
+  <g opacity="0">
+    <animate attributeName="opacity" from="0" to="1" begin="1.8s" dur="0.5s" fill="freeze"/>
+    <rect x="125" y="280" width="130" height="50" rx="10" fill="#0F172A" stroke="#10B981" stroke-width="2" filter="url(#mmGlowEmerald)"/>
+    <rect x="125" y="280" width="130" height="50" rx="10" fill="#10B981" opacity="0.1"/>
+    <text x="190" y="311" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="700" fill="#6EE7B7">Skills</text>
+  </g>
+  <!-- Agents (purple) -->
+  <g opacity="0">
+    <animate attributeName="opacity" from="0" to="1" begin="2.0s" dur="0.5s" fill="freeze"/>
+    <rect x="335" y="280" width="130" height="50" rx="10" fill="#0F172A" stroke="#8B5CF6" stroke-width="2" filter="url(#mmGlowPurple)"/>
+    <rect x="335" y="280" width="130" height="50" rx="10" fill="#8B5CF6" opacity="0.1"/>
+    <text x="400" y="311" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="700" fill="#C4B5FD">Agents</text>
+  </g>
+  <!-- Prompts (amber) -->
+  <g opacity="0">
+    <animate attributeName="opacity" from="0" to="1" begin="2.2s" dur="0.5s" fill="freeze"/>
+    <rect x="545" y="280" width="130" height="50" rx="10" fill="#0F172A" stroke="#F59E0B" stroke-width="2" filter="url(#mmGlowAmber)"/>
+    <rect x="545" y="280" width="130" height="50" rx="10" fill="#F59E0B" opacity="0.1"/>
+    <text x="610" y="311" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="700" fill="#FCD34D">Prompts</text>
+  </g>
+
+  <!-- ========== LINES TO SOURCES ========== -->
+  <g opacity="0">
+    <animate attributeName="opacity" from="0" to="0.55" begin="2.6s" dur="0.5s" fill="freeze"/>
+    <line x1="190" y1="330" x2="190" y2="395" stroke="#10B981" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <line x1="400" y1="330" x2="400" y2="395" stroke="#8B5CF6" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <line x1="610" y1="330" x2="610" y2="395" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="4 3"/>
+  </g>
+
+  <!-- ========== SOURCE CARDS ========== -->
+  <!-- GitHub Repos -->
+  <g opacity="0">
+    <animate attributeName="opacity" from="0" to="1" begin="3.0s" dur="0.5s" fill="freeze"/>
+    <rect x="115" y="395" width="150" height="70" rx="10" fill="#0F172A" stroke="#10B981" stroke-width="1.5"/>
+    <rect x="115" y="395" width="150" height="70" rx="10" fill="#10B981" opacity="0.06"/>
+    <text x="190" y="423" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#E0E0E0">GitHub</text>
+    <text x="190" y="444" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#E0E0E0">Repos</text>
+  </g>
+  <!-- Local Paths -->
+  <g opacity="0">
+    <animate attributeName="opacity" from="0" to="1" begin="3.2s" dur="0.5s" fill="freeze"/>
+    <rect x="325" y="395" width="150" height="70" rx="10" fill="#0F172A" stroke="#8B5CF6" stroke-width="1.5"/>
+    <rect x="325" y="395" width="150" height="70" rx="10" fill="#8B5CF6" opacity="0.06"/>
+    <text x="400" y="423" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#E0E0E0">Local</text>
+    <text x="400" y="444" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#E0E0E0">Paths</text>
+  </g>
+  <!-- Private Repos -->
+  <g opacity="0">
+    <animate attributeName="opacity" from="0" to="1" begin="3.4s" dur="0.5s" fill="freeze"/>
+    <rect x="535" y="395" width="150" height="70" rx="10" fill="#0F172A" stroke="#F59E0B" stroke-width="1.5"/>
+    <rect x="535" y="395" width="150" height="70" rx="10" fill="#F59E0B" opacity="0.06"/>
+    <text x="610" y="423" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#E0E0E0">Private</text>
+    <text x="610" y="444" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#E0E0E0">Repos</text>
+  </g>
+
+  <!-- ========== FOOTNOTE ========== -->
+  <text x="400" y="525" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#9CA3AF" opacity="0">
+    One catalog of references. Agents pull on demand.
+    <animate attributeName="opacity" from="0" to="1" begin="3.8s" dur="0.6s" fill="freeze"/>
+  </text>
+  <text x="400" y="555" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#6B7280" opacity="0">
+    build → catalog → distribute → use → sync
+    <animate attributeName="opacity" from="0" to="0.85" begin="4.1s" dur="0.6s" fill="freeze"/>
+  </text>
+</svg>
