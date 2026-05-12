@@ -1,52 +1,84 @@
 # The Registry
 
-A meta-skill for private-first distribution of agentics (skills, agents, and prompts) across agents, devices, and teams.
+**Private-first infrastructure for AI skills, agents, and prompts.**
+
+Build once. Sync everywhere. The Registry distributes prompts, skills, and AI agents across your devices, applications, and teams — using simple references to local paths and Git repositories.
+
+No plugins. No marketplace. No lock-in. No build step.
+Just portable agent infrastructure.
 
 ![The Registry](images/10_meta_skill.svg)
 
-## Who This Is For
+---
 
-If you're an engineer working on 10+ codebases with agents and you're building specialized private skills, agents, and prompts — this was made for you.
+## Mental Model
 
-If you work in one or two repos, you don't need this. If you install skills from the public internet without reviewing them, this isn't for you either.
+Think of it as **`package.json` for agent capabilities** — but instead of public packages, you point at your own private repos and local paths. Instead of copying skills between projects, you maintain one catalog of references that agents pull on demand.
 
-The Registry solves a specific problem: you've built powerful agentics scattered across repos, devices, and teams. They're duplicated, out of sync, and hard to coordinate. This gives you a single reference catalog to distribute them privately.
+```
+┌──────────────────────┐
+│     The Registry     │
+│    registry.yaml     │
+└──────────┬───────────┘
+           │
+    ┌──────┼──────┐
+    │      │      │
+ Skills  Agents Prompts
+    │      │      │
+ GitHub  Local   Private
+ Repos   Paths   Repos
+```
 
-## What It Is
+---
 
-The Registry is a single skill whose only job is to manage other skills. It's a catalog of references — local file paths and GitHub repo URLs — that point to where your agentics live. Nothing is copied or installed until you ask for it.
-
-Think of it as a `package.json` for agent capabilities — but instead of packages, you're managing skills, agents, and prompts. Instead of a registry, you're pointing at your own private GitHub repos and local paths.
-
-**This is a pure agent application.** There are no scripts, no CLIs, no dependencies, no build tools. The entire application is encoded in `SKILL.md` and a set of cookbook instructions that teach the agent exactly what to do. The agent IS the runtime. This matters because:
-
-- Any agent harness that reads skill files can run it (Claude Code, Pi, etc.)
-- You can modify behavior by editing markdown, not code
-- The skill can be extended, forked, and adapted instantly
-- An orchestrator agent can chain registry commands without any tooling overhead
-
-## Why It Exists
+## The Problem
 
 ![The Problem: Skill Sprawl](images/26_problem_skill_sprawl.svg)
 
-As you build with AI agents, you accumulate skills, custom agents, and prompts — potentially hundreds of them. You need to:
-
-- **Reuse** them across projects without copy-pasting
-- **Distribute** them to your agents running on other devices (Mac mini, remote servers, cloud sandboxes)
-- **Share** them with your team without making everything public
-- **Keep them private** — these are specialized capabilities built for competitive edge
-- **Stay in sync** — one source of truth, not 10 stale copies
+As you build with AI agents, you accumulate skills, custom agents, and prompts — sometimes hundreds of them. They live scattered across repos, devices, and teammates. They duplicate. They drift out of sync. They can't be safely public because they encode your specialized workflows.
 
 ![The Problem: Siloed Teams](images/32_problem_team_sharing.svg)
 
-Existing solutions don't fit:
+Existing options don't fit:
+
 - **Global `~/.claude/*`** — exposes everything to every agent. Global is the opposite of specialized.
-- **Claude Code plugins** — requires marketplace infrastructure, manifests, and locks you into one platform.
-- **Single monorepo** — doesn't reflect reality. You build agentics in specific codebases for specific use cases.
+- **Plugin marketplaces** — require manifests, gatekeepers, and platform lock-in.
+- **Single monorepo** — doesn't reflect reality. Capabilities are built in the repos where they're used.
+
+## The Solution
+
+![The Solution: The Registry](images/27_solution_library_workflow.svg)
+
+The Registry is a **catalog of references** — pointers to where your agentics actually live (local paths and Git URLs). Nothing is copied or installed until you ask for it.
+
+The workflow is simple: **build → catalog → distribute → use → sync**.
+
+---
+
+## The Agent Is the Runtime
+
+The Registry contains **no traditional application code**.
+
+The entire system is encoded as markdown instructions, catalogs, and workflows — interpreted directly by the agent itself. The agent IS the runtime.
+
+This means:
+
+- **No plugin system** — nothing to register or compile
+- **No daemon** — nothing running in the background
+- **No runtime installation** — drop the files in, you're done
+- **No lock-in** — works with any agent harness that reads markdown skills
+
+Behavior is modified by editing markdown, not code. Any compatible agent harness (Claude Code, Pi, Codex, OpenCode, or anything that loads markdown-based skills) can execute The Registry simply by reading the skill files.
+
+---
+
+## Who This Is For
+
+The Registry is designed for engineers and teams managing specialized AI workflows across multiple repositories, environments, and devices — where capabilities need to stay private, in sync, and easy to distribute.
+
+---
 
 ## How It Works
-
-![The Solution: The Registry](images/27_solution_registry_workflow.svg)
 
 ### The Catalog (`registry.yaml`)
 
@@ -75,7 +107,7 @@ registry:
   prompts: []
 ```
 
-The catalog stores pointers, not copies. Skills live in their source repos. You pull on demand.
+The catalog stores **pointers, not copies**. Skills live in their source repos. You pull on demand.
 
 ### Source Formats
 
@@ -85,51 +117,52 @@ The catalog stores pointers, not copies. Skills live in their source repos. You 
 | GitHub browser URL | `https://github.com/org/repo/blob/main/path/to/SKILL.md`           |
 | GitHub raw URL     | `https://raw.githubusercontent.com/org/repo/main/path/to/SKILL.md` |
 
-The source points to a specific file. The system pulls the entire parent directory (skills include scripts, references, assets — not just the markdown file).
+The source points to a specific file; the system pulls the entire parent directory (skills include scripts, references, and assets — not just the markdown file).
 
 For private repos, authentication uses SSH keys or `GITHUB_TOKEN` automatically.
 
 ### Typed Dependencies
 
-Dependencies use typed references to avoid name collisions:
+Dependencies use typed references to avoid name collisions and are resolved recursively before the requested item:
 
 ```yaml
 requires: [skill:base-utils, agent:reviewer, prompt:task-router]
 ```
 
-Dependencies are resolved and pulled first, recursively.
+---
 
 ## Prerequisites
 
-- **Claude Code** (or a compatible agent harness that reads `.claude/skills/` — e.g., Pi)
+- **A compatible agent harness** — Claude Code, Pi, or anything that reads `.claude/skills/` style markdown
 - **git** — for cloning sources and syncing the catalog
-- **gh** (optional) — GitHub CLI for forking, cloning, and private repo access. Install: `brew install gh` or see [gh docs](https://cli.github.com)
-- **GitHub SSH key or `GITHUB_TOKEN`** — for accessing private repos (not needed if using `gh auth login`)
-- **just** (optional) — for justfile shortcuts. Install: `brew install just` or see [just docs](https://github.com/casey/just)
+- **gh** *(optional)* — GitHub CLI for forking, cloning, and private repo access. Install: `brew install gh`
+- **GitHub SSH key or `GITHUB_TOKEN`** — for private repo access (not needed if using `gh auth login`)
+- **just** *(optional)* — for `justfile` shortcuts. Install: `brew install just`
+
+---
 
 ## Installation
 
-This is a template repo. You fork it, clone it into your global skills directory, and it becomes a `/registry` slash command available in every Claude Code session.
+This is a template repo. You create your own private copy, clone it into your global skills directory, and `/registry` becomes available in every agent session.
 
-### 1. Fork This Repo
+### 1. Create Your Private Registry
 
-Fork to your own GitHub account (private repo recommended). This fork is your personal registry catalog — you'll push catalog updates to it.
+Create a private copy from this template — this becomes your personal catalog you'll push updates to.
 
 ```bash
 # Using GitHub CLI
 gh repo create YevheniiVolosiuk/the-registry --private --template disler/the-library --clone=false
 ```
 
-Or fork manually via the GitHub UI.
+Or create it manually via the GitHub UI using the **"Use this template"** button.
 
 ### 2. Clone to Global Skills Directory
 
-Clone your fork into `~/.claude/skills/registry`. This path is what makes `/registry` available as a global slash command in Claude Code.
+Clone your repo into `~/.claude/skills/registry`. This path is what makes `/registry` available as a global slash command.
 
 ```bash
-# Using git
 mkdir -p ~/.claude/skills/registry
-git clone <your-fork-url> ~/.claude/skills/registry
+git clone <your-repo-url> ~/.claude/skills/registry
 
 # Or using GitHub CLI
 gh repo clone <yourname>/the-registry ~/.claude/skills/registry
@@ -137,77 +170,61 @@ gh repo clone <yourname>/the-registry ~/.claude/skills/registry
 
 ### 3. Configure
 
-Open `~/.claude/skills/registry/SKILL.md` and update the `## Variables` section with your fork URL. The agent reads these variables at runtime to know where to sync the catalog.
+Open `~/.claude/skills/registry/SKILL.md` and update the `## Variables` section with your repo URL:
 
 ```markdown
-# Before (template defaults)
-- **REGISTRY_REPO_URL**: `<your forked repo url>`
-
-# After (your values)
 - **REGISTRY_REPO_URL**: `https://github.com/yourname/the-registry.git`
 ```
 
-The other two variables (`REGISTRY_YAML_PATH` and `REGISTRY_SKILL_DIR`) are correct by default if you cloned to `~/.claude/skills/registry/`.
+`REGISTRY_YAML_PATH` and `REGISTRY_SKILL_DIR` are correct by default.
 
 ### 4. Verify
 
-Start a new Claude Code session anywhere. `/registry list` should work and show an empty catalog.
+Start a new agent session anywhere. `/registry list` should work and show an empty catalog.
+
+---
 
 ## Quick Start
 
 ![Full Workflow](images/45_solution_full_workflow.svg)
 
-Here's the typical workflow: **build → catalog → distribute → use**.
-
 ### Add a skill to the catalog
-
-You built a deploy skill in one of your repos. Register it:
 
 ```
 /registry add deploy skill from https://github.com/yourorg/infra-tools/blob/main/skills/deploy/SKILL.md
 ```
 
-This adds a reference to `registry.yaml` and pushes the update to your fork.
+This adds a reference to `registry.yaml` and pushes the update to your repo.
 
 ### Use it in another project
-
-On another device, repo, or agent:
 
 ```
 /registry use deploy
 ```
 
-This pulls the skill from the source repo into `.claude/skills/deploy/`.
+Pulls the skill from the source into `.claude/skills/deploy/`. Add `install globally` to install to `~/.claude/skills/`.
 
-Want it globally available on this machine?
-
-```
-/registry use deploy install globally
-```
-
-### Push changes back
-
-You improved the skill locally. Push the update to the source repo:
+### Push improvements back
 
 ```
 /registry push deploy
 ```
 
-Now every device that runs `/registry sync` gets the latest version.
+Every device that runs `/registry sync` gets the latest version.
 
 ### Sync everything
-
-Pull the latest version of all installed items:
 
 ```
 /registry sync
 ```
 
+---
+
 ## Commands
 
-| Command                     | What It Does                                               |
-| --------------------------- | ---------------------------------------------------------- |
-| `/registry install`          | First-time setup — fork, clone, configure                  |
+| Command                      | What It Does                                               |
+| ---------------------------- | ---------------------------------------------------------- |
+| `/registry install`          | First-time setup — create, clone, configure                |
 | `/registry add <details>`    | Register a new entry in the catalog                        |
 | `/registry use <name>`       | Pull from source into local directory (install or refresh) |
 | `/registry push <name>`      | Push local changes back to the source                      |
@@ -218,7 +235,7 @@ Pull the latest version of all installed items:
 
 ### Justfile Shortcuts
 
-The included `justfile` lets you run registry commands from your terminal without an interactive Claude session.
+Run registry commands from your terminal without an interactive agent session:
 
 ```bash
 just list                  # List catalog
@@ -229,15 +246,17 @@ just sync                  # Re-pull all installed items
 just search "keyword"
 ```
 
-> **Note:** Justfile recipes use `--dangerously-skip-permissions` because the agent needs filesystem and git access to clone, copy, and push. Review the `justfile` if you want to modify this behavior.
+> Justfile recipes use `--dangerously-skip-permissions` because the agent needs filesystem and git access. Review the `justfile` if you want to change this.
+
+---
 
 ## Architecture
 
 ```
-~/.claude/skills/registry/     # The Registry skill (globally installed)
+~/.claude/skills/registry/    # The Registry skill (globally installed)
     SKILL.md                  # Agent instructions — the brain
-    registry.yaml              # Your catalog of references
-    cookbook/                  # Step-by-step guides for each command
+    registry.yaml             # Your catalog of references
+    cookbook/                 # Step-by-step guides for each command
         install.md
         add.md
         use.md
@@ -250,22 +269,26 @@ just search "keyword"
     README.md                 # This file
 ```
 
+---
+
 ## Design Principles
 
-- **Private-first**: Built for your specialized, competitive-edge agentics. Not a public marketplace.
-- **Reference-based**: The catalog stores pointers, not copies. Skills live in their source repos.
-- **Pure agent**: No scripts, no build tools. The SKILL.md teaches the agent everything it needs to know.
-- **Agent-agnostic**: Default target is `.claude/skills/` but supports any directory for any agent harness.
-- **Catalog, not manifest**: Entries define what's available, not what's installed. Pull on demand.
+- **Private-first** — built for specialized, competitive-edge capabilities, not a public marketplace
+- **Reference-based** — the catalog stores pointers, not copies
+- **Agent-native** — the agent reads markdown and executes; no separate runtime
+- **Harness-agnostic** — works with any agent that loads markdown skills
+- **Catalog, not manifest** — entries define what's *available*, not what's installed. Pull on demand.
+
+---
 
 ## The Agentic Stack
 
 ![The Agentic Stack](images/03_agentic_stack.svg)
 
-| Layer           | Purpose                                        |
-| --------------- | ---------------------------------------------- |
-| **Skills**      | Raw capabilities — what an agent can do        |
-| **Agents**      | Scale + parallelism + specialization           |
-| **Prompts**     | Orchestration — coordinate skills and agents   |
-| **Justfile**    | Terminal access without an interactive session |
+| Layer            | Purpose                                        |
+| ---------------- | ---------------------------------------------- |
+| **Skills**       | Raw capabilities — what an agent can do        |
+| **Agents**       | Scale, parallelism, specialization             |
+| **Prompts**      | Orchestration — coordinate skills and agents   |
+| **Justfile**     | Terminal access without an interactive session |
 | **The Registry** | Distribution across devices, teams, and agents |
