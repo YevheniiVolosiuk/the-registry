@@ -209,21 +209,6 @@
   </g>
 
   <!-- ============================================================ -->
-  <!-- TITLE: "The Agentic Stack"                                   -->
-  <!-- ============================================================ -->
-  <text x="400" y="100" font-size="28" font-weight="700" fill="#E0E0E0" text-anchor="middle" opacity="0">
-    The Agentic Stack
-    <animate attributeName="opacity" from="0" to="1" dur="0.8s" begin="8s" fill="freeze"
-             calcMode="spline" keySplines="0 0 0.2 1" keyTimes="0;1"/>
-  </text>
-
-  <!-- Subtle underline for title -->
-  <line x1="290" y1="110" x2="510" y2="110" stroke="#6366F1" stroke-width="1" stroke-opacity="0">
-    <animate attributeName="stroke-opacity" from="0" to="0.4" dur="0.6s" begin="8.3s" fill="freeze"/>
-    <animate attributeName="stroke-opacity" values="0.4;0.2;0.4" dur="4s" begin="10s" repeatCount="indefinite"/>
-  </line>
-
-  <!-- ============================================================ -->
   <!-- BOTTOM LABEL                                                  -->
   <!-- ============================================================ -->
   <text x="400" y="522" font-size="14" fill="#9CA3AF" text-anchor="middle" opacity="0" font-style="italic">
